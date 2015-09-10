@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 # source 'https://rails-assets.org'
 
-ruby '2.1.1'
+ruby '2.2.3'    # Make sure ruby version here matches the the .rvmrc file
+# ruby '2.1.1'    # Make sure ruby version here matches the the .rvmrc file
 
 gem 'rails', '~> 4.1'
 
@@ -53,9 +54,6 @@ gem 'uglifier', '>= 2.4.0'
 
 # Angular
 gem 'angular-rails-templates', '~> 0.1.3'
-# gem 'rails-assets-angular-loading-bar'    # source 'https://rails-assets.org'
-# gem 'rails-assets-angular-ui-utils'       # source 'https://rails-assets.org'
-# gem 'rails-assets-angular-ui-select2'     # source 'https://rails-assets.org'
 
 group :development do
   gem 'taps', :require => false

@@ -13,15 +13,11 @@ describe 'StartController Tests', ->
     $scope = undefined
     $controller = undefined
     svUtility = undefined
-#    Focus = undefined
 
     beforeEach inject (_$rootScope_, _$controller_, _$httpBackend_, _SessionSettings_, _svUtility_) ->
       $rootScope = _$rootScope_
       $rootScope.sessionSettings = _SessionSettings_
       svUtility = _svUtility_
-      #      $location = _$location_
-      #      VotingService = _VotingService_
-      #      Proposal = _Proposal_
       $rootScope.alertService =
         clearAlerts: jasmine.createSpy 'alertService:clearAlerts'
         setInfo: jasmine.createSpy 'alertService:setInfo'
@@ -31,7 +27,8 @@ describe 'StartController Tests', ->
       $rootScope.currentUser =
         id: 5
       $scope = $rootScope.$new()
-#      Focus = jasmine.createSpy 'Focus'
+      spyOn svUtility, 'focus'
+        .and.callThrough()
 
       $provide.value '$route',
         current:
@@ -42,23 +39,45 @@ describe 'StartController Tests', ->
 
       $controller 'StartController',
         $scope: $scope
-#        Focus: Focus
 
-    it 'StartController should initialize', ->
+    it 'should initialize', ->
       expect $rootScope.alertService.clearAlerts.calls.count()
         .toEqual 1
       expect svUtility
         .toBeDefined()
-#      expect $scope.commentStep
-#        .toBeDefined()
-#      expect $scope.hubStep
-#        .toBeDefined()
-#      expect $scope.finishProp
-#        .toBeDefined()
       expect $scope.sessionSettings.newVote
         .toEqual {}
 
-    it 'sessionSettings.newVote.parent_id should be undefined', ->
+    it 'should set initial values', ->
+      expect $scope.sessionSettings.actions.hubSeekOnSearch
+        .toEqual false
+      expect $scope.sessionSettings.actions.hubPlaceholder
+        .toContain 'Who should see'
+      expect $scope.sessionSettings.actions.newVoteDetails.propStepText
+        .toContain 'You have 140 characters'
+
+    it 'should set hub visibility if one is present', ->
+      $scope.sessionSettings.hub_attributes =
+        full_hub:'Some great hub'
+        isTag: false
+
+      $controller 'StartController',
+        $scope: $scope
+
+      expect $scope.sessionSettings.actions.hubShow
+        .toEqual true
+
+
+    it 'should turn off hub visibility if one is NOT present', ->
+      $scope.sessionSettings.hub_attributes = null
+
+      $controller 'StartController',
+        $scope: $scope
+
+      expect $scope.sessionSettings.actions.hubShow
+        .toEqual false
+
+    it 'should set sessionSettings.newVote.parent_id to undefined', ->
       $scope.sessionSettings.newVote.parent_id = 156
 
       $controller 'StartController',
@@ -67,8 +86,8 @@ describe 'StartController Tests', ->
       expect $rootScope.sessionSettings.newVote.parent_id
         .toBeUndefined()
 
-#    it 'StartController should focus proposal statement', ->
-#      expect Focus
-#        .toHaveBeenCalledWith '#proposal_statement'
-#      expect Focus.calls.count()
-#        .toEqual 1
+    it 'StartController should focus proposal statement', ->
+      expect svUtility.focus
+        .toHaveBeenCalledWith '#new_proposal_statement'
+      expect svUtility.focus.calls.count()
+        .toEqual 1

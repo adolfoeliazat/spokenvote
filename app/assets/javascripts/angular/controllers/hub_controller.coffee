@@ -22,23 +22,22 @@ HubController = ['$scope', '$rootScope', '$location', '$http', 'SelectHubLoader'
         $scope.hubs = response
 
   $rootScope.setHub = (item, model) ->
-#    console.log '$scope.sessionSettings.hub_attributes: ', $scope.sessionSettings.hub_attributes
     if item.isTag and item.full_hub.length >= $scope.sessionSettings.spokenvote_attributes.minimumHubNameLength
-#      console.log 'isTag: $scope.sessionSettings.hub_attributes', $scope.sessionSettings.hub_attributes
       if not $scope.currentUser.id
         $scope.authService.signinFb($scope).then ->
-          $scope.votingService.new()  unless $location.path() == '/start'
+          $scope.votingService.new()  unless $location.path() is '/start'
           svUtility.focus '#hub_formatted_location'
       else
         $scope.votingService.new()  unless $location.path() is '/start'
+        $scope.sessionSettings.actions.hintShow = false
         svUtility.focus '#hub_formatted_location'
     else if item.isTag
       $scope.sessionSettings.hub_attributes = null
     else
       item.id = item.select_id
-      $location.search('hub', item.id)
+      $location.search 'hub', item.id
       if $scope.sessionSettings.actions.hubSeekOnSearch is true
-        $location.path('/proposals')
+        $location.path '/proposals'
       else
         $scope.votingService.commentStep()
 
@@ -57,6 +56,15 @@ HubController = ['$scope', '$rootScope', '$location', '$http', 'SelectHubLoader'
       item =
         full_hub: newTag
     item
+
+  $scope.finishProp = ->
+    $scope.sessionSettings.actions.hintShow = false
+    if $scope.sessionSettings.newVote.statement and $scope.sessionSettings.hub_attributes
+      $scope.sessionSettings.actions.focus = 'comment'
+      svUtility.focus '#new_vote_comment'
+    else
+      svUtility.focus '#new_proposal_statement'
+    console.log 'finishProp: '
 ]
 
 App.controller 'HubController', HubController

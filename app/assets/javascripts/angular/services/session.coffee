@@ -90,37 +90,16 @@ SessionSettings = ->
   actions:
     detailPage: false
     focus: null
-    hub_attributes: null
+#    hub_attributes: null
+    hintShow: false
     hubSeekOnSearch: true
     hubPlaceholder: 'Search to find your Group ...'
     hubShow: true
     newVoteDetails: {}
     offcanvas: false
     userFilter: null
-#    improveProposal:
-#      propStepText: ''
-#      commentStepText: ''
-#    newProposal: {}
-#    newProposalHub: null
-#    selectHub: false
-#    wizardToGroup: null
   openModals:
-#    signIn: false
-#    register: false
-#    userSettings: false
-#    supportProposal: false
-#    improveProposal: false
-#    newProposal: false
-#    editProposal: false
     deleteProposal: false
-#    getStarted: false
-#  proposal: null
-#  vote: {}
-#  searchedHub: {}
-#  newSupport:
-#    related: null
-#    target: null
-#    vote: null
   lastLocation:
     location_id: null
     formatted_location: null
